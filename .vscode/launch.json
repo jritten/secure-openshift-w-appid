@@ -1,0 +1,32 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-ResourceApplication<resource-ms>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.ibm.fsarch.resource.ResourceApplication",
+            "projectName": "resource-ms",
+            "args": "",
+            "env": {
+                "TENANT_ID": "REPLACE_WITH_TENANT_ID"
+            }            
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ModernBffApplication<modern-bff>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.ibm.fsarch.resource.ModernBffApplication",
+            "projectName": "modern-bff",
+            "args": "",
+            "env": {
+                "TENANT_ID": "REPLACE_WITH_TENANT_ID",
+                "CLIENT_ID": "REPLACE_WITH_CLIENT_ID",
+                "CLIENT_SECRET": "REPLACE_WITH_SECRET"
+            }
+        }
+    ]
+}

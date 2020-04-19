@@ -1,0 +1,27 @@
+debug: false
+---
+server:
+  port: ${PORT:9000}
+
+#logging:
+#  level:
+#    org.springframework:
+#      security: DEBUG
+#      session: TRACE
+
+# Disable security auto password generation 
+spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+
+app:
+   tenantId: '${TENANT_ID}'
+   hostName: ${HOSTNAME:resource-ms}
+
+spring:
+ security:
+  oauth2:
+    resourceserver:
+      jwt:
+        issuer-uri:  https://us-south.appid.cloud.ibm.com/oauth/v4/${app.tenantId}
+
+#enable the actuator endpoints for health, metrics, and prometheus.
+management.endpoints.web.exposure.include: health,metrics,liveness,info, prometheus

@@ -1,0 +1,30 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "install:all",
+			"path": "modern-ui/",
+			"problemMatcher": [],
+			"label": "npm: install:all - modern-ui",
+			"detail": "cd my-app; npm i; cd ..; npm i"
+		},
+		{
+			"type": "npm",
+			"script": "build",
+			"path": "modern-ui/",
+			"group": "build",
+			"problemMatcher": [],
+			"label": "npm: build - modern-ui",
+			"detail": "cd my-app; npm run build:prod; cd .."
+		},
+		{
+			"type": "npm",
+			"script": "start",
+			"path": "modern-ui/",
+			"problemMatcher": [],
+			"label": "npm: start - modern-ui",
+			"detail": "node server.js"
+		}
+	]
+}

@@ -1,0 +1,36 @@
+
+debug: false
+---
+server:
+  port: ${PORT:8080}
+  servlet:
+    session:
+       cookie:
+          name: '${session_cookie:MYSESSIONID}'
+
+logging:
+  level:
+    org.springframework:
+      # security: DEBUG
+      session: INFO
+
+app:
+   tenantId: '${TENANT_ID}'
+   uiRedirectUri: '${UI_REDIRECT_URI:http://localhost:4200}'
+   resourceMSUri: '${RESOURCE_MS_URI:http://localhost:9000}'
+   security:
+      allowedOrigins:
+      - '${app.uiRedirectUri}'
+
+security:
+  oauth2:
+    client:
+      client-id: '${CLIENT_ID}'
+      client-secret: '${CLIENT_SECRET}'
+      accessTokenUri: https://us-south.appid.cloud.ibm.com/oauth/v4/${app.tenantId}/token
+      userAuthorizationUri: https://us-south.appid.cloud.ibm.com/oauth/v4/${app.tenantId}/authorization
+    resource:
+      userInfoUri: https://us-south.appid.cloud.ibm.com/oauth/v4/${app.tenantId}/userinfo
+
+#enable the actuator endpoints for health, metrics, and prometheus.
+management.endpoints.web.exposure.include: health,metrics,prometheus,liveness

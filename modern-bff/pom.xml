@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.ibm.fsarch</groupId>
+	<artifactId>modern-bff</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<name>modern-bff</name>
+	<description>Demo project for Spring Boot BFF</description>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.8.RELEASE</version>
+		<relativePath />
+		<!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<jkube.maven.plugin.version>1.0.0-alpha-1</jkube.maven.plugin.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- spring-boot-starter-security used to implement OAuth2/OIDC Spring security -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security.oauth.boot</groupId>
+			<artifactId>spring-security-oauth2-autoconfigure</artifactId>
+			<version>2.1.9.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>openshift</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.eclipse.jkube</groupId>
+						<artifactId>openshift-maven-plugin</artifactId>
+						<version>${jkube.maven.plugin.version}</version>
+						<configuration>
+							<generator>
+								<includes>
+									<include>spring-boot</include>
+								</includes>
+								<config>
+									<spring-boot>
+										<!-- "alias" is used to correlate to the containers in the pod spec -->
+										<alias>modern-bff</alias>
+										<from>registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift</from>
+									</spring-boot>
+								</config>
+							</generator>
+						</configuration>
+						<executions>
+							<execution>
+								<goals>
+									<!-- Create your OpenShift resource descriptors -->
+									<goal>resource</goal>
+									<!-- Build component and start S2I build -->
+									<goal>build</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+
+	<build>
+		<!-- <finalName>${project.artifactId}</finalName> -->
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

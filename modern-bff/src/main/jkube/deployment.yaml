@@ -1,0 +1,32 @@
+spec:
+  template:
+    spec:
+      containers:
+      - env:
+        - name: PORT
+          value: 8080
+        - name: TENANT_ID
+          value: REPLACE_WITH_TENANT_ID   
+        - name: CLIENT_ID
+          value: REPLACE_WITH_CLIENT_ID
+        - name: CLIENT_SECRET
+          value: REPLACE_WITH_SECRET
+        - name: UI_REDIRECT_URI
+          value: http://modern-ui-cloudready-security.apps-crc.testing
+        - name: RESOURCE_MS_URI
+          value: http://resource-ms:8080
+        livenessProbe:
+          failureThreshold: 12
+          httpGet:
+            path: /actuator/liveness
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 2
+        readinessProbe:
+          failureThreshold: 12
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 2
+

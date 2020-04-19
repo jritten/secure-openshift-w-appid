@@ -1,0 +1,28 @@
+{
+  "name": "modern-ui",
+  "version": "0.0.1",
+  "description": "Modern-ui nodejs web app",
+  "private": true,
+  "engines": {
+    "node": "^8.0.0"
+  },
+  "main": "server.js",
+  "scripts": {
+    "install:all": "cd my-app; npm i; cd ..; npm i",
+    "start": "node server.js",
+    "build": "cd my-app; npm run build:prod; cd ..",
+    "nodeshift": "nodeshift",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "package.json",
+    "public",
+    "server.js"
+  ],
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodeshift": "^6.0.2"
+  }
+}
