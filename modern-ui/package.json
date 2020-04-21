@@ -8,9 +8,9 @@
   },
   "main": "server.js",
   "scripts": {
-    "install:all": "cd my-app; npm i; cd ..; npm i",
+    "install:all": "cd my-app && npm i && cd .. && npm i",
     "start": "node server.js",
-    "build": "cd my-app; npm run build:prod; cd ..",
+    "build": "cd my-app && npm run build:prod && cd ..",
     "nodeshift": "nodeshift",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

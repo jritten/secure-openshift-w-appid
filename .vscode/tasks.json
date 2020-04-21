@@ -7,7 +7,7 @@
 			"path": "modern-ui/",
 			"problemMatcher": [],
 			"label": "npm: install:all - modern-ui",
-			"detail": "cd my-app; npm i; cd ..; npm i"
+			"detail": "cd my-app && npm i && cd .. && npm i"
 		},
 		{
 			"type": "npm",
@@ -16,7 +16,7 @@
 			"group": "build",
 			"problemMatcher": [],
 			"label": "npm: build - modern-ui",
-			"detail": "cd my-app; npm run build:prod; cd .."
+			"detail": "cd my-app && npm run build:prod && cd .."
 		},
 		{
 			"type": "npm",

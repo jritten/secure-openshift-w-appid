@@ -23,8 +23,12 @@ This tutorial explores modern user and microservice security. Specifically, this
 
     a. Requires Red Hat Developer credentials, which gives you access to developer tools and programs via [Red Hat Developer](https://developers.redhat.com). To sign-up, click the `Log In` link on the top right of the page and then click the `Create one now` link.
 
-
     b. Perform [Chapter 2. Installation](https://access.redhat.com/documentation/en-us/red_hat_codeready_containers/1.8/html-single/getting_started_guide/index#installation_gsg)
+
+    c. (Optional - Windows) On windows, you will need to reboot after `crc setup` if you have not enabled Hyper-V before. Reboot is required to enable the Hyper-V feature.
+
+    d. (Optional - Windows) On windows, if `crc start` fails, perform `crc delete`, `rmdir .crc` then `crc setup` and `crc start`.
+
 
 1. Confirm OpenShift CRC `running` on the local machine:
 
@@ -32,7 +36,48 @@ This tutorial explores modern user and microservice security. Specifically, this
     crc status
     ```
 
-### B. IBM App ID
+### B. Git Command Line Tools
+1. **Optional:** If you do not have Git client installed, go to the [Git client downloads](https://git-scm.com/downloads) website to download and install the Git client.
+
+    **NOTE (Windows Users):** During install, on the `Choosing HTTPS transport backend` step, select `Use the native Windows Secure Channel library`.
+
+### C. (Optional - Windows) Java Development Kit installation
+
+1. Verify Java Installation with the following command:
+
+    ```sh
+    java -fullversion
+    ```
+
+1. **Optional:** If you do not have Java installed, go to the [Java SE Development Kit 8 Downloads](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) website to download and install Java.
+
+     **NOTE:** During installation, change installation to **c:\\** ( e.g. C:\jdk1.8.0_251 )
+
+1. Add `JAVA_HOME` system environment variable that point to your base java folder path (e.g., C:\jdk1.8.0_251 )
+
+
+### D. (Optional) NodeJS Installation
+
+1. Verify NodeJS Installation with the following command:
+
+    ```sh
+    npm -version
+    ```
+    
+    **Optional:** If you do not have NodeJS installed, go to the [NodeJS](https://nodejs.org/en/) website to download and install NodeJS.
+
+### E. (Optional) Visual Studio Code
+
+1. **Optional** If you do not have Visual Studio Code installed, go to the [Visual Studio Code Download](https://code.visualstudio.com/download) website to download and install the Visual Studio Code.
+
+1. Install Visual Studio Code Extensions:
+
+    * [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
+    * [Spring Boot Extension Pack](https://marketplace.visualstudio.com/items?itemName=Pivotal.vscode-boot-dev-pack)
+    * [vscode-lombok](https://marketplace.visualstudio.com/items?itemName=GabrielBB.vscode-lombok)
+
+
+### F. IBM App ID
 1. You must have an IBM Cloud account. If you don't have one, [sign up for a trial](https://cloud.ibm.com/registration). The account requires an `IBMid`. If you don't have an `IBMid`, you can create one when you register.
 
 1. Setup `App ID`, the IBM OpenID Connect (OIDC) service
@@ -63,63 +108,22 @@ This tutorial explores modern user and microservice security. Specifically, this
             * `clientId`
             * `tenantId`
             * `secret`
-    
-### C. Git Command Line Tools
-1. **Optional:** If you do not have Git client installed, go to the [Git client downloads](https://git-scm.com/downloads) website to download and install the Git client.
 
-    **NOTE (Windows Users):** During install, on the `Choosing HTTPS transport backend` step, select `Use the native Windows Secure Channel library`.
+### G. IBM Cloud Gitlab Personal Access Token setup
 
-### D. IBM Cloud Gitlab SSH Keys setup
+1. Generate [Personal Access Tokens](https://us-south.git.cloud.ibm.com/profile/personal_access_tokens). Select all under `Scopes` and click `Create personal access token`
 
-1. [Generating a new SSH key pair](https://us-south.git.cloud.ibm.com/help/ssh/README#generating-a-new-ssh-key-pair).
-   **NOTE:** leverage RSA instructions
-
-
-1. [Adding an SSH key to your GitLab account](https://us-south.git.cloud.ibm.com/help/ssh/README#adding-an-ssh-key-to-your-gitlab-account)
-
-
-### E. (Optional) Visual Studio Code
-
-1. **Optional** If you do not have Visual Studio Code installed, go to the [Visual Studio Code Download](https://code.visualstudio.com/download) website to download and install the Visual Studio Code.
-
-1. Install Visual Studio Code Extensions:
-
-    * [Java Extension Pack](https://marketplace.visualstudio.com/items?itemName=vscjava.vscode-java-pack)
-    * [Spring Boot Extension Pack](https://marketplace.visualstudio.com/items?itemName=Pivotal.vscode-boot-dev-pack)
-
-
-### F. (Optional - Windows) Java Development Kit installation
-
-1. Verify Java Installation with the following command:
-
-    ```sh
-    java -fullversion
-    ```
-
-1. **Optional:** If you do not have Java installed, go to the [Java SE Development Kit 8 Downloads](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) website to download and install Java.
-
-     **NOTE:** During installation, change installation to **c:\\** ( e.g. C:\jdk1.8.0_231 )
-
-1. Add `JAVA_HOME` system environment variable that point to your base java folder path (e.g., C:\jdk1.8.0_231 )
-
-
-### G. (Optional) NodeJS Installation
-
-1. Verify NodeJS Installation with the following command:
-
-    ```sh
-    npm -version
-    ```
-    
-    **Optional:** If you do not have NodeJS installed, go to the [NodeJS](https://nodejs.org/en/) website to download and install NodeJS.
+   **NOTE:** Note and save `Personal access token` for future use
 
 ### H. Clone cloudready-app-security
 
 1. Clone **cloudready-app-security.git** GIT repo
 
     ```sh
-    git clone git@us-south.git.cloud.ibm.com:gm4c-mod/cloudready-app-security.git
+    git clone https://gm4cappmod:<MYTOKEN>@us-south.git.cloud.ibm.com/gm4c-mod/cloudready-app-security.git
     ```
+
+    **NOTE:** Replace <MYTOKEN> with your `personal access token` from step [G. IBM Cloud Gitlab Personal Access Token setup](#g-ibm-cloud-gitlab-personal-access-token-setup)
 
 
 ## Part 1: Running locally
@@ -132,14 +136,22 @@ This tutorial explores modern user and microservice security. Specifically, this
 01. Update `REPLACE_WITH_CLIENT_ID`, `REPLACE_WITH_TENANT_ID` and `REPLACE_WITH__SECRET` with registered `App ID` app
     
     1. With Visual Studio Code, click menu bar `Edit`-> `Replace in Files`
+
     1. For `Search` field, enter `REPLACE_WITH_CLIENT_ID`
-    1. For `Replace` field, enter `clientId` data saved from [B. IBM App ID](#B-ibm-app-id) step 5
+    
+    1. For `Replace` field, enter `clientId` data saved from [F. IBM App ID](#f-ibm-app-id) step 5
+    
     1. With Visual Studio Code, click menu bar `Edit`-> `Replace in Files`
+    
     1. For `Search` field, enter `REPLACE_WITH_TENANT_ID`
-    1. For `Replace` field, enter `tenantId` data saved from [B. IBM App ID](#B-ibm-app-id) step 5
+    
+    1. For `Replace` field, enter `tenantId` data saved from [F. IBM App ID](#f-ibm-app-id) step 5
+    
     1. With Visual Studio Code, click menu bar `Edit`-> `Replace in Files`
-    1. For `Search` field, enter `REPLACE_WITH__SECRET`
-    1. For `Replace` field, enter `secret` data saved from [B. IBM App ID](#B-ibm-app-id) step 5
+    
+    1. For `Search` field, enter `REPLACE_WITH_SECRET`
+    
+    1. For `Replace` field, enter `secret` data saved from [F. IBM App ID](#f-ibm-app-id) step 5
 
 01. Run **resource-ms** locally. Within Visual Studio Code:
     1. Expand **SPRING-BOOT DASHBOARD**, click the refresh icon, right mouse click on **resource-ms** and click **Start**
@@ -173,27 +185,16 @@ This tutorial explores modern user and microservice security. Specifically, this
 
 ## Part 2: Run on OpenShift
 
-01. Within Visual Studio Code Terminal, create an OpenShift project as the `developer` user
-    **NOTE:** Verify user via `oc whoami`
-    
-    **macOS/Unix**
+01. Open a Terminal or Windows `Git Bash` window, create an OpenShift project as the `developer` user
 
     ```sh
-    eval $(crc oc-env); oc login -u developer
+    eval $(crc oc-env); oc login -u developer -p developer --server=https://api.crc.testing:6443 --insecure-skip-tls-verify
     oc new-project cloudready-security
-    ```
-    
-    **Windows**
-
-    ```sh
-     & crc oc-env | Invoke-Expression
-     oc login -u developer
-     oc new-project cloudready-security
     ```
 
 01. Deploy **resource-ms** microservice application to OpenShift
 
-     01. Build and deploy **resource-ms** microservice to OpenShift. Within Visual Studio, perform the following within Terminal:
+     01. Build and deploy **resource-ms** microservice to OpenShift. Within the Terminal or Windows `Git Bash` window, perform the following:
 
          ```sh
          cd resource-ms
@@ -206,7 +207,7 @@ This tutorial explores modern user and microservice security. Specifically, this
 
           **NOTE:** 
           * Ignore `ERROR`s denoting cannot extract Git information
-          * When deploying new code or configurations changes, perform the following after running `oc:deploy`
+          * When deploying additional code or configuration changes, perform the following after running `oc:deploy`
             
             ```sh
             oc rollout latest resource-ms
@@ -223,7 +224,7 @@ This tutorial explores modern user and microservice security. Specifically, this
 
 01. Deploy **modern-bff** microservice application to OpenShift
 
-     01. Build and deploy **modern-bff** microservice to OpenShift. Within Visual Studio, perform the following within Terminal:
+     01. Build and deploy **modern-bff** microservice to OpenShift. Within the Terminal or Windows `Git Bash` window, perform the following:
      
          ```sh
          cd ../modern-bff
@@ -252,9 +253,7 @@ This tutorial explores modern user and microservice security. Specifically, this
 
 01. Deploy **modern-ui** microservice UI application to OpenShift
 
-     01. Build and deploy **modern-ui** microservice to OpenShift. Within Visual Studio, perform the following within Terminal:
-
-         **MacOS**
+     01. Build and deploy **modern-ui** microservice to OpenShift. Within the Terminal or Windows `Git Bash` window, perform the following:
 
          ```sh
          cd ../modern-ui
