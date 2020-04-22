@@ -11,13 +11,13 @@
 		},
 		{
 			"type": "npm",
-			"script": "build",
+			"script": "build:content",
 			"path": "modern-ui/",
 			"group": "build",
 			"problemMatcher": [],
-			"label": "npm: build - modern-ui",
+			"label": "npm: build:content - modern-ui",
 			"detail": "cd my-app && npm run build:prod && cd .."
-		},
+		},		
 		{
 			"type": "npm",
 			"script": "start",

@@ -11,37 +11,22 @@ This tutorial explores modern user and microservice security. Specifically, this
 
 ## Table of Contents
 * [Pre-reqs](#pre-reqs)
-* [Part 1: Running local](#part-1-running-local)
+
+    * [Basic - Run Locally Pre-reqs](#basic-run-locally-pre-reqs)
+    * [Advance - Run on OpenShift Pre-reqs](#advance-run-on-openShift-pre-reqs)
+* [Part 1: Running local](#part-1-running-locally)
 * [Part 2: Run on OpenShift](#part-2-run-on-openshift)
 
 ## Pre-reqs
 
-### A. Red Hat CodeReady Container
-1. [Install on Laptop: Red Hat CodeReady Containers](https://cloud.redhat.com/openshift/install/crc/installer-provisioned)
+### Basic - Run Locally Pre-reqs
 
-    **NOTES:**
-
-    a. Requires Red Hat Developer credentials, which gives you access to developer tools and programs via [Red Hat Developer](https://developers.redhat.com). To sign-up, click the `Log In` link on the top right of the page and then click the `Create one now` link.
-
-    b. Perform [Chapter 2. Installation](https://access.redhat.com/documentation/en-us/red_hat_codeready_containers/1.8/html-single/getting_started_guide/index#installation_gsg)
-
-    c. (Optional - Windows) On windows, you will need to reboot after `crc setup` if you have not enabled Hyper-V before. Reboot is required to enable the Hyper-V feature.
-
-    d. (Optional - Windows) On windows, if `crc start` fails, perform `crc delete`, `rmdir .crc` then `crc setup` and `crc start`.
-
-
-1. Confirm OpenShift CRC `running` on the local machine:
-
-    ```sh
-    crc status
-    ```
-
-### B. Git Command Line Tools
+#### A. Git Command Line Tools
 1. **Optional:** If you do not have Git client installed, go to the [Git client downloads](https://git-scm.com/downloads) website to download and install the Git client.
 
     **NOTE (Windows Users):** During install, on the `Choosing HTTPS transport backend` step, select `Use the native Windows Secure Channel library`.
 
-### C. (Optional - Windows) Java Development Kit installation
+#### B. (Optional - Windows) Java Development Kit installation
 
 1. Verify Java Installation with the following command:
 
@@ -56,7 +41,7 @@ This tutorial explores modern user and microservice security. Specifically, this
 1. Add `JAVA_HOME` system environment variable that point to your base java folder path (e.g., C:\jdk1.8.0_251 )
 
 
-### D. (Optional) NodeJS Installation
+#### C. (Optional) NodeJS Installation
 
 1. Verify NodeJS Installation with the following command:
 
@@ -66,7 +51,7 @@ This tutorial explores modern user and microservice security. Specifically, this
     
     **Optional:** If you do not have NodeJS installed, go to the [NodeJS](https://nodejs.org/en/) website to download and install NodeJS.
 
-### E. (Optional) Visual Studio Code
+#### D. (Optional) Visual Studio Code
 
 1. **Optional** If you do not have Visual Studio Code installed, go to the [Visual Studio Code Download](https://code.visualstudio.com/download) website to download and install the Visual Studio Code.
 
@@ -77,23 +62,32 @@ This tutorial explores modern user and microservice security. Specifically, this
     * [vscode-lombok](https://marketplace.visualstudio.com/items?itemName=GabrielBB.vscode-lombok)
 
 
-### F. IBM App ID
+#### E. IBM App ID
 1. You must have an IBM Cloud account. If you don't have one, [sign up for a trial](https://cloud.ibm.com/registration). The account requires an `IBMid`. If you don't have an `IBMid`, you can create one when you register.
 
 1. Setup `App ID`, the IBM OpenID Connect (OIDC) service
     1. Create `App ID`
         1. Open Browser to [Create AppID](https://cloud.ibm.com/catalog/services/app-id)
         1. Under `Select a region`, confirm or select `Dallas` and click the `Create` button
+
     1. Setup `Cloud Identity Provider`
         1. Within App ID page, click `Manage Authentication` and perform the following:
+
             1. `Disable` the following Identity Providers: `Facebook, Google, Anonymous`
+
             1. Confirm the following is `enabled`: `Cloud Directory`
+
     1. Add `web redirect URLs`
         1. Within App ID page, click `Manage Authentication` -> `Authentication Settings`. Under `Add web redirect URLs`, add the following URLs:
+
             1. Add `http://localhost:8080/login` and click the `Plus` button
+
             1. Add `http://modern-bff-cloudready-security.apps-crc.testing/login` and click the `Plus` button
+
     1. Setup `Cloud Directory`:
+
         1. Within App ID page, click `Cloud Directory` -> `Settings`. Under `Allow users to sign-up and sign-in using:` select `Username and password`
+
         1. Within App ID page, click `Cloud Directory` -> `Users`. Click `Create User`, complete form and click `Save`
 
             **IMPORTANT:** Note `username` and `password` for later use
@@ -109,13 +103,13 @@ This tutorial explores modern user and microservice security. Specifically, this
             * `tenantId`
             * `secret`
 
-### G. IBM Cloud Gitlab Personal Access Token setup
+#### F. IBM Cloud Gitlab Personal Access Token setup
 
 1. Generate [Personal Access Tokens](https://us-south.git.cloud.ibm.com/profile/personal_access_tokens). Select all under `Scopes` and click `Create personal access token`
 
    **NOTE:** Note and save `Personal access token` for future use
 
-### H. Clone cloudready-app-security
+#### G. Clone cloudready-app-security
 
 1. Clone **cloudready-app-security.git** GIT repo
 
@@ -123,7 +117,33 @@ This tutorial explores modern user and microservice security. Specifically, this
     git clone https://gm4cappmod:<MYTOKEN>@us-south.git.cloud.ibm.com/gm4c-mod/cloudready-app-security.git
     ```
 
-    **NOTE:** Replace <MYTOKEN> with your `personal access token` from step [G. IBM Cloud Gitlab Personal Access Token setup](#g-ibm-cloud-gitlab-personal-access-token-setup)
+    **NOTE:** Replace <MYTOKEN> with your `personal access token` from step [F. IBM Cloud Gitlab Personal Access Token setup](#f-ibm-cloud-gitlab-personal-access-token-setup)
+
+### Advance - Run on OpenShift Pre-Reqs
+#### H. Red Hat CodeReady Container
+1. [Install on Laptop: Red Hat CodeReady Containers](https://cloud.redhat.com/openshift/install/crc/installer-provisioned)
+
+    **NOTES:**
+
+    a. Requires Red Hat Developer credentials, which gives you access to developer tools and programs via [Red Hat Developer](https://developers.redhat.com). To sign-up, click the `Log In` link on the top right of the page and then click the `Create one now` link.
+
+    b. Perform [Chapter 2. Installation](https://access.redhat.com/documentation/en-us/red_hat_codeready_containers/1.8/html-single/getting_started_guide/index#installation_gsg)
+
+    c. (Optional - Windows) On windows, you will need to reboot after `crc setup` if you have not enabled Hyper-V before. Reboot is required to enable the Hyper-V feature.
+
+    d. (Optional - Windows) On windows, if `crc start` fails, perform `crc delete`, `rmdir .crc` then `crc setup` and `crc start`.
+
+    e. (Optional - Windows) On windows, if you observe ` error pinging docker registry quay.io` error within OpenShift events, perform `crc stop`, then `crc start -n 1.1.1.1`
+
+
+
+1. Confirm OpenShift CRC `running` on the local machine:
+
+    ```sh
+    crc status
+    ```
+
+
 
 
 ## Part 1: Running locally
@@ -139,19 +159,19 @@ This tutorial explores modern user and microservice security. Specifically, this
 
     1. For `Search` field, enter `REPLACE_WITH_CLIENT_ID`
     
-    1. For `Replace` field, enter `clientId` data saved from [F. IBM App ID](#f-ibm-app-id) step 5
+    1. For `Replace` field, enter `clientId` data saved from [E. IBM App ID](#e-ibm-app-id) step 5
     
     1. With Visual Studio Code, click menu bar `Edit`-> `Replace in Files`
     
     1. For `Search` field, enter `REPLACE_WITH_TENANT_ID`
     
-    1. For `Replace` field, enter `tenantId` data saved from [F. IBM App ID](#f-ibm-app-id) step 5
+    1. For `Replace` field, enter `tenantId` data saved from [E. IBM App ID](#e-ibm-app-id) step 5
     
     1. With Visual Studio Code, click menu bar `Edit`-> `Replace in Files`
     
     1. For `Search` field, enter `REPLACE_WITH_SECRET`
     
-    1. For `Replace` field, enter `secret` data saved from [F. IBM App ID](#f-ibm-app-id) step 5
+    1. For `Replace` field, enter `secret` data saved from [E. IBM App ID](#e-ibm-app-id) step 5
 
 01. Run **resource-ms** locally. Within Visual Studio Code:
     1. Expand **SPRING-BOOT DASHBOARD**, click the refresh icon, right mouse click on **resource-ms** and click **Start**
@@ -168,9 +188,9 @@ This tutorial explores modern user and microservice security. Specifically, this
 
           **NOTE**: Check Terminal and enter an appropriate response to `Would you like to share anonymous usage data with the Angular Team at Google ...` question, if prompted
 
-    1. Build `modern-ui` angular resources:
+    1. Build `modern-ui` angular content:
        
-       1. Select `Terminal` from the menu bar, then `Run Task...` and select `npm: build - modern-ui` and select `Continue without scanning the task output`
+       1. Select `Terminal` from the menu bar, then `Run Task...` and select `npm: build:content - modern-ui` and select `Continue without scanning the task output`
      
     1. Run `modern-ui` node app:
 
@@ -257,7 +277,7 @@ This tutorial explores modern user and microservice security. Specifically, this
 
          ```sh
          cd ../modern-ui
-         npm run build
+         npm run build:content
          npm run nodeshift
          oc expose svc/modern-ui
          ```

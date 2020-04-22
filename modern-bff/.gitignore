@@ -1,7 +1,7 @@
 /target/
 .appsody-spring-trigger
 !.mvn/wrapper/maven-wrapper.jar
-
+target*.jar
 
 ### STS ###
 .apt_generated
