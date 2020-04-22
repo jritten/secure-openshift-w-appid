@@ -1,10 +1,13 @@
 # Tutorial: Application Security
 
 This tutorial explores modern user and microservice security. Specifically, this tutorial enables the following:
-* Separate UI deployment unit
-* Leverages `Backend-for-frontend` pattern
-* Leverages externalize Authentication services based on `OpenID Connect` (OIDC)
-* Microservice security leverages OIDC `Java Web KeySet (JWKS)` Public Keys
+
+* A web app that provides the user interface through the web browser and leverages externalize Authentication services based on [IBM Cloud App ID](https://cloud.ibm.com/catalog/services/app-id) OpenID Connect (OIDC) services. Specifically, the web app leverages the OIDC Authorization Grant Type.
+* A Java microservice that implements the Backend-for-frontend (BFF) pattern. The BFF and OIDC integration are implemented by using the Spring Boot Framework and Spring Security related frameworks. This microservice is packaged as a container leveraging [Eclipse JKube](https://www.eclipse.org/jkube/) automatic source-to-image and deployed to a Red Hat OpenShift CodeReady Container.
+* The Java Resource microservices returns a simple message. The microservice is implemented by using the Spring Boot Framework and Spring Security related frameworks. This microservice is packaged as a container leveraging [Eclipse JKube](https://www.eclipse.org/jkube/) automatic source-to-image and deployed to a Red Hat OpenShift CodeReady Container.
+* The microservice-to-microservice security between the BFF and Resource microservice leverages the OIDC JSON Web Tokens (JWT) and the Java Web KeySet (JWKS) Public Keys.
+
+
 
 *NOTE:* The monolith application is based on the [Spring Security and Angular Tutorial](https://spring.io/guides/tutorials/spring-security-and-angular-js/).
 
@@ -13,7 +16,7 @@ This tutorial explores modern user and microservice security. Specifically, this
 * [Pre-reqs](#pre-reqs)
 
     * [Basic - Run Locally Pre-reqs](#basic-run-locally-pre-reqs)
-    * [Advance - Run on OpenShift Pre-reqs](#advance-run-on-openShift-pre-reqs)
+    * [Advance - Run on OpenShift Pre-reqs](#advance-run-on-openshift-pre-reqs)
 * [Part 1: Running local](#part-1-running-locally)
 * [Part 2: Run on OpenShift](#part-2-run-on-openshift)
 
