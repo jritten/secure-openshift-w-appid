@@ -31,6 +31,7 @@ testem.log
 users.htpasswd
 /typings
 **/*DONOT_SAVE*.*
+/gm4cappmod-app.env
 
 # System Files
 .DS_Store

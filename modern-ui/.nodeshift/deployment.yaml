@@ -8,7 +8,7 @@ spec:
           - name: PORT
             value: '8080'
           - name: BFF_URL
-            value: http://modern-bff-cloudready-security.apps-crc.testing
+            value: http://modern-bff-cloudfriendly-security.apps-crc.testing
           livenessProbe:
             failureThreshold: 12
             httpGet:

@@ -15,7 +15,6 @@ logging:
       session: INFO
 
 app:
-   tenantId: '${TENANT_ID}'
    uiRedirectUri: '${UI_REDIRECT_URI:http://localhost:4200}'
    resourceMSUri: '${RESOURCE_MS_URI:http://localhost:9000}'
    security:
@@ -27,10 +26,10 @@ security:
     client:
       client-id: '${CLIENT_ID}'
       client-secret: '${CLIENT_SECRET}'
-      accessTokenUri: https://us-south.appid.cloud.ibm.com/oauth/v4/${app.tenantId}/token
-      userAuthorizationUri: https://us-south.appid.cloud.ibm.com/oauth/v4/${app.tenantId}/authorization
+      accessTokenUri: ${OAUTH_SERVER_URL}/token
+      userAuthorizationUri: ${OAUTH_SERVER_URL}/authorization
     resource:
-      userInfoUri: https://us-south.appid.cloud.ibm.com/oauth/v4/${app.tenantId}/userinfo
+      userInfoUri: ${OAUTH_SERVER_URL}/userinfo
 
 #enable the actuator endpoints for health, metrics, and prometheus.
 management.endpoints.web.exposure.include: health,metrics,prometheus,liveness
