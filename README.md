@@ -1,6 +1,6 @@
-# Tutorial: Application Security
+# Cloud-Friendly App Security Exercise
 
-This tutorial explores modern user and microservice security. Specifically, this tutorial enables the following:
+This exercise explores modern user and microservice security. Specifically, this exercise enables the following:
 
 * A web app that provides the user interface through the web browser and leverages externalize Authentication services based on [IBM Cloud App ID](https://cloud.ibm.com/catalog/services/app-id) OpenID Connect (OIDC) services. Specifically, the web app leverages the OIDC Authorization Grant Type.
 * A Java microservice that implements the Backend-for-frontend (BFF) pattern. The BFF and OIDC integration are implemented by using the Spring Boot Framework and Spring Security related frameworks. This microservice is packaged as a container leveraging [Eclipse JKube](https://www.eclipse.org/jkube/) automatic source-to-image and deployed to a Red Hat OpenShift CodeReady Container.
@@ -8,23 +8,51 @@ This tutorial explores modern user and microservice security. Specifically, this
 * The microservice-to-microservice security between the BFF and Resource microservice leverages the OIDC JSON Web Tokens (JWT) and the Java Web KeySet (JWKS) Public Keys.
 
 
-
 *NOTE:* The monolith application is based on the [Spring Security and Angular Tutorial](https://spring.io/guides/tutorials/spring-security-and-angular-js/).
 
 
+
+Cloud Friendly capabilities supported by this exercise:
+
+| Capabilities                               | Supported |
+| ------------------------------------------ |:---------:|
+| No Permanent disk access                   | Yes       |
+| Self-contained application                 | Yes       |
+| Platform-managed ports and networking      | Yes       |
+| Consumes platform-managed backing services | Yes       |
+| 12 Factor App methodology                  | Yes       |
+| Horizonal scalable                         | Yes       |
+| Leverages platform for high availability   | Yes       |
+--------------------------------------------------------------
+
+Technology Stack
+* Spring Boot (v2.1.8) with embedded Tomcat
+* NodeJS
+* Angular 8.2.x
+* OpenShift CodeReadyContainer
+* [IBM Cloud App ID](https://cloud.ibm.com/catalog/services/app-id)
+* [NodeShift](https://nodeshift.dev/nodeshift/)
+* [Jkube](https://www.eclipse.org/jkube/)
+
+We'll explore turning the application into a cloud friendly solution by breaking up the `legacy-ui` app, introducing the backend-for-frontend pattern, leveraging an external authentication service and introducing microservice security.
+
+![Cloud Friendly App Security](imgs/Cloud_Friendly_App_Security-Cloud_Friendly.png)
+
 ## Table of Contents
+
 * [Pre-reqs](#pre-reqs)
 
-    * [Basic - Run Locally Pre-reqs](#basic-run-locally-pre-reqs)
-    * [Advance - Run on OpenShift Pre-reqs](#advance-run-on-openshift-pre-reqs)
+  * [Basic - Run Locally Pre-reqs](#basic-run-locally-pre-reqs)
+  * [Advance - Run on OpenShift Pre-reqs](#advance-run-on-openshift-pre-reqs)
 * [Part 1: Running local](#part-1-running-locally)
-* [Part 2: Run on OpenShift](#part-2-run-on-openshift)
+* [Part 2: Run on Local OpenShift](#part-2-run-on-local-openshift)
 
 ## Pre-reqs
 
 ### Basic - Run Locally Pre-reqs
 
 #### A. Git Command Line Tools
+
 1. **Optional:** If you do not have Git client installed, go to the [Git client downloads](https://git-scm.com/downloads) website to download and install the Git client.
 
     **NOTE (Windows Users):** During install, on the `Choosing HTTPS transport backend` step, select `Use the native Windows Secure Channel library`.
@@ -43,7 +71,6 @@ This tutorial explores modern user and microservice security. Specifically, this
 
 1. Add `JAVA_HOME` system environment variable that point to your base java folder path (e.g., C:\jdk1.8.0_251 )
 
-
 #### C. (Optional) NodeJS Installation
 
 1. Verify NodeJS Installation with the following command:
@@ -51,7 +78,7 @@ This tutorial explores modern user and microservice security. Specifically, this
     ```sh
     npm -version
     ```
-    
+
     **Optional:** If you do not have NodeJS installed, go to the [NodeJS](https://nodejs.org/en/) website to download and install NodeJS.
 
 #### D. (Optional) Visual Studio Code
@@ -64,8 +91,8 @@ This tutorial explores modern user and microservice security. Specifically, this
     * [Spring Boot Extension Pack](https://marketplace.visualstudio.com/items?itemName=Pivotal.vscode-boot-dev-pack)
     * [vscode-lombok](https://marketplace.visualstudio.com/items?itemName=GabrielBB.vscode-lombok)
 
-
 #### E. IBM App ID
+
 1. You must have an IBM Cloud account. If you don't have one, [sign up for a trial](https://cloud.ibm.com/registration). The account requires an `IBMid`. If you don't have an `IBMid`, you can create one when you register.
 
 1. Setup `App ID`, the IBM OpenID Connect (OIDC) service
@@ -85,7 +112,7 @@ This tutorial explores modern user and microservice security. Specifically, this
 
             1. Add `http://localhost:8080/login` and click the `Plus` button
 
-            1. Add `http://modern-bff-cloudready-security.apps-crc.testing/login` and click the `Plus` button
+            1. Add `http://modern-bff-cloudfriendly-security.apps-crc.testing/login` and click the `Plus` button
 
     1. Setup `Cloud Directory`:
 
@@ -103,27 +130,22 @@ This tutorial explores modern user and microservice security. Specifically, this
         1. Click `Save`
         1. Expand `gm4cappmod-app` and note the following for later use
             * `clientId`
-            * `tenantId`
             * `secret`
+            * `oAuthServerUrl`
 
-#### F. IBM Cloud Gitlab Personal Access Token setup
+#### F. Clone cloudfriendly-app-security
 
-1. Generate [Personal Access Tokens](https://us-south.git.cloud.ibm.com/profile/personal_access_tokens). Select all under `Scopes` and click `Create personal access token`
-
-   **NOTE:** Note and save `Personal access token` for future use
-
-#### G. Clone cloudready-app-security
-
-1. Clone **cloudready-app-security.git** GIT repo
+1. Clone **cloudfriendly-app-security.git** GIT repo
 
     ```sh
-    git clone https://gm4cappmod:<MYTOKEN>@us-south.git.cloud.ibm.com/gm4c-mod/cloudready-app-security.git
+    git clone https://us-south.git.cloud.ibm.com/gm4c-mod/cloudfriendly-app-security.git
+    cd cloudfriendly-app-security
     ```
 
-    **NOTE:** Replace <MYTOKEN> with your `personal access token` from step [F. IBM Cloud Gitlab Personal Access Token setup](#f-ibm-cloud-gitlab-personal-access-token-setup)
-
 ### Advance - Run on OpenShift Pre-Reqs
-#### H. Red Hat CodeReady Container
+
+#### G. Red Hat CodeReady Container
+
 1. [Install on Laptop: Red Hat CodeReady Containers](https://cloud.redhat.com/openshift/install/crc/installer-provisioned)
 
     **NOTES:**
@@ -138,166 +160,164 @@ This tutorial explores modern user and microservice security. Specifically, this
 
     e. (Optional - Windows) On windows, if you observe ` error pinging docker registry quay.io` error within OpenShift events, perform `crc stop`, then `crc start -n 1.1.1.1`
 
-
-
 1. Confirm OpenShift CRC `running` on the local machine:
 
     ```sh
     crc status
     ```
 
-
-
-
 ## Part 1: Running locally
 
-01. Open `cloudready-app-security` inside Visual Studio Code
+1. Open `cloudfriendly-app-security` inside Visual Studio Code
 
      1. Open Visual Studio Code
-     1. File->Open Workspace... -> cloudready-app-security.code-workspace
+     1. File->Open Workspace... -> cloudfriendly-app-security.code-workspace
 
-01. Update `REPLACE_WITH_CLIENT_ID`, `REPLACE_WITH_TENANT_ID` and `REPLACE_WITH__SECRET` with registered `App ID` app
-    
-    1. With Visual Studio Code, click menu bar `Edit`-> `Replace in Files`
+1. Open `.vscode/launch.json` and replace `REPLACE_WITH_CLIENT_ID`, `REPLACE_WITH__SECRET`, and `REPLACE_WITH_OAUTH_SERVER_URL` with registered `App ID` app info:
 
-    1. For `Search` field, enter `REPLACE_WITH_CLIENT_ID`
-    
-    1. For `Replace` field, enter `clientId` data saved from [E. IBM App ID](#e-ibm-app-id) step 5
-    
-    1. With Visual Studio Code, click menu bar `Edit`-> `Replace in Files`
-    
-    1. For `Search` field, enter `REPLACE_WITH_TENANT_ID`
-    
-    1. For `Replace` field, enter `tenantId` data saved from [E. IBM App ID](#e-ibm-app-id) step 5
-    
-    1. With Visual Studio Code, click menu bar `Edit`-> `Replace in Files`
-    
-    1. For `Search` field, enter `REPLACE_WITH_SECRET`
-    
-    1. For `Replace` field, enter `secret` data saved from [E. IBM App ID](#e-ibm-app-id) step 5
+    1. Replace `REPLACE_WITH_CLIENT_ID` with `clientId` data saved from IBM App ID, Pre-reqs step 4.
 
-01. Run **resource-ms** locally. Within Visual Studio Code:
+    1. Replace `REPLACE_WITH_SECRET` with `secret` data saved from IBM App ID, Pre-reqs step 4.
+
+    1. Replace `REPLACE_WITH_OAUTH_SERVER_URL` with `oAuthServerUrl` data saved from IBM App ID, Pre-reqs step 4.
+
+        **NOTE:** Two locations in .vscode/launch.json file
+
+1. Run **resource-ms** locally. Within Visual Studio Code:
     1. Expand **SPRING-BOOT DASHBOARD**, click the refresh icon, right mouse click on **resource-ms** and click **Start**
 
-01. Run **modern-bff** locally. Within Visual Studio Code:
+1. Run **modern-bff** locally. Within Visual Studio Code:
     1. Expand **SPRING-BOOT DASHBOARD**, click the refresh icon, right mouse click on **modern-bff** and click **Start**
 
+1. Run **modern-ui** locally. Within Visual Studio Code:
 
-01. Run **modern-ui** locally. Within Visual Studio Code:
-    
-    1. Install `modern-ui` dependent npm modules
-    
+    1. Install `modern-ui` dependent npm modules:
+
        1. Select `Terminal` from menu bar, then `Run Task...` and select `npm: install:all - modern-ui`
 
           **NOTE**: Check Terminal and enter an appropriate response to `Would you like to share anonymous usage data with the Angular Team at Google ...` question, if prompted
 
     1. Build `modern-ui` angular content:
-       
+
        1. Select `Terminal` from the menu bar, then `Run Task...` and select `npm: build:content - modern-ui` and select `Continue without scanning the task output`
-     
+
     1. Run `modern-ui` node app:
 
        1. Select `Terminal` from the menu bar, then `Run Task...` and select `npm: start - modern-ui` and select `Continue without scanning the task output`
 
-01. Open browser to http://localhost:4200
+1. Open browser to http://localhost:4200
 
-01. Click **Login**, enter your username and password and click submit:
+1. Click **Login**, enter your username and password and click submit:
 
-01. Click [Details](http://localhost:4200/details). You should observe ID and content information
+1. Click [Details](http://localhost:4200/details). You should observe ID and content information
 
 
-## Part 2: Run on OpenShift
+## Part 2: Run on Local OpenShift
 
-01. Open a Terminal or Windows `Git Bash` window, create an OpenShift project as the `developer` user
+1. Open a Terminal or Windows `Git Bash` window, create an OpenShift project as the `developer` user
 
     ```sh
     eval $(crc oc-env); oc login -u developer -p developer --server=https://api.crc.testing:6443 --insecure-skip-tls-verify
-    oc new-project cloudready-security
+    oc new-project cloudfriendly-security
     ```
 
-01. Deploy **resource-ms** microservice application to OpenShift
+1. Create OIDC `gm4cappmod-app` secret
 
-     01. Build and deploy **resource-ms** microservice to OpenShift. Within the Terminal or Windows `Git Bash` window, perform the following:
+    1. Copy template-app-id.env to gm4cappmod-app.env
 
-         ```sh
-         cd resource-ms
-         
-         # Create your OpenShift resource descriptors
-         # Build component and start S2I build
-         # and Deploy your microservice on Openshift cluster
-         ./mvnw clean package oc:deploy -Popenshift
-         ```
+    1. Edit `gm4cappmod-app.env`
 
-          **NOTE:** 
-          * Ignore `ERROR`s denoting cannot extract Git information
-          * When deploying additional code or configuration changes, perform the following after running `oc:deploy`
-            
-            ```sh
-            oc rollout latest resource-ms
-            ```
+        1. Replace `REPLACE_WITH_OAUTH_SERVER_URL` with `oAuthServerUrl` data saved from IBM App ID, Pre-reqs step 4.
+        1. Replace `REPLACE_WITH_CLIENT_ID` with `clientId` data saved from IBM App ID, Pre-reqs step 4.
+        1. Replace `REPLACE_WITH_SECRET` with `secret` data saved from IBM App ID, Pre-reqs step 4.
 
-     01. Check the status of `resource-ms` app
+    1. Create gm4cappmod-app secret on OpenShift
 
-          ```sh
-          oc status
-          ```
+        ```sh
+        oc create secret generic gm4cappmod-app --from-env-file=gm4cappmod-app.env
+        ```
 
-          **NOTE:** Might need to repeat the command until it displays `deployment #1 running`
+1. Deploy **resource-ms** microservice application to OpenShift
 
+    1. Build and deploy **resource-ms** microservice to OpenShift. Within the Terminal or Windows `Git Bash` window, perform the following:
 
-01. Deploy **modern-bff** microservice application to OpenShift
+        ```sh
+        cd resource-ms
 
-     01. Build and deploy **modern-bff** microservice to OpenShift. Within the Terminal or Windows `Git Bash` window, perform the following:
-     
-         ```sh
-         cd ../modern-bff
-         
-         # Create your OpenShift resource descriptors
-         # Build component and start S2I build
-         # and Deploy your microservice on Openshift cluster
-         ./mvnw clean package oc:deploy -Popenshift
-         ```
-         
-          **NOTE:** 
-          * Ignore `ERROR`s denoting cannot extract Git information
-          * When deploying new code or configurations changes, perform the following after running `oc:deploy`
-            
-            ```sh
-            oc rollout latest modern-bff
-            ```         
+        # Create your OpenShift resource descriptors
+        # Build component and start S2I build
+        # and Deploy your microservice on Openshift cluster
+        ./mvnw clean package oc:deploy -Popenshift
+        ```
 
-     01. Check the status of `modern-bff` app
+        **NOTE:** 
+        * Ignore `ERROR`(s) denoting cannot extract Git information
+        * When deploying additional code or configuration changes, perform the following after running `oc:deploy`
 
-          ```sh
-          oc status
-          ```
+        ```sh
+        oc rollout latest resource-ms
+        ```
 
-          **NOTE:** Might need to repeat the command until it displays `deployment #1 running`
+    1. Check the status of `resource-ms` app
 
-01. Deploy **modern-ui** microservice UI application to OpenShift
+        ```sh
+        oc status
+        ```
 
-     01. Build and deploy **modern-ui** microservice to OpenShift. Within the Terminal or Windows `Git Bash` window, perform the following:
+        **NOTE:** Might need to repeat the command until it displays `deployment #1 running`
 
-         ```sh
-         cd ../modern-ui
-         npm run build:content
-         npm run nodeshift
-         oc expose svc/modern-ui
-         ```
+1. Deploy **modern-bff** microservice application to OpenShift
 
-     01. Check the status of `modern-ui` app
+    1. Build and deploy **modern-bff** microservice to OpenShift. Within the Terminal or Windows `Git Bash` window, perform the following:
 
-          ```sh
-          oc status
-          ```
+        ```sh
+        cd ../modern-bff
 
-          **NOTE:** Might need to repeat the command until it displays `deployment #1 deployed`
+        # Create your OpenShift resource descriptors
+        # Build component and start S2I build
+        # and Deploy your microservice on Openshift cluster
+        ./mvnw clean package oc:deploy -Popenshift
+        ```
 
+        **NOTE:**
+        * Ignore `ERROR`(s) denoting cannot extract Git information
+        * When deploying new code or configurations changes, perform the following after running `oc:deploy`
 
-01. Open browser to `modern-ui`
+        ```sh
+        oc rollout latest modern-bff
+        ```
 
-    1. Open browser to http://modern-ui-cloudready-security.apps-crc.testing
-     
+    1. Check the status of `modern-bff` app
+
+        ```sh
+        oc status
+        ```
+
+        **NOTE:** Might need to repeat the command until it displays `deployment #1 running`
+
+1. Deploy **modern-ui** microservice UI application to OpenShift
+
+    1. Build and deploy **modern-ui** microservice to OpenShift. Within the Terminal or Windows `Git Bash` window, perform the following:
+
+        ```sh
+        cd ../modern-ui
+        npm run build:content
+        npm run nodeshift
+        oc expose svc/modern-ui
+        ```
+
+    1. Check the status of `modern-ui` app
+
+        ```sh
+        oc status
+        ```
+
+        **NOTE:** Might need to repeat the command until it displays `deployment #1 deployed`
+
+1. Open browser to `modern-ui`
+
+    1. Open browser to http://modern-ui-cloudfriendly-security.apps-crc.testing
+
     1. Click **Login**, enter the following and click submit:
 
        username: <your username>

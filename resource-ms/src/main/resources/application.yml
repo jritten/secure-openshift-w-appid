@@ -13,7 +13,6 @@ server:
 spring.autoconfigure.exclude: org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
 
 app:
-   tenantId: '${TENANT_ID}'
    hostName: ${HOSTNAME:resource-ms}
 
 spring:
@@ -21,7 +20,7 @@ spring:
   oauth2:
     resourceserver:
       jwt:
-        issuer-uri:  https://us-south.appid.cloud.ibm.com/oauth/v4/${app.tenantId}
+        issuer-uri:  ${OAUTH_SERVER_URL}
 
 #enable the actuator endpoints for health, metrics, and prometheus.
 management.endpoints.web.exposure.include: health,metrics,liveness,info, prometheus

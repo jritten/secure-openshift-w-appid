@@ -10,7 +10,7 @@
             "projectName": "resource-ms",
             "args": "",
             "env": {
-                "TENANT_ID": "REPLACE_WITH_TENANT_ID"
+                "OAUTH_SERVER_URL": "REPLACE_WITH_OAUTH_SERVER_URL"
             }            
         },
         {
@@ -23,9 +23,9 @@
             "projectName": "modern-bff",
             "args": "",
             "env": {
-                "TENANT_ID": "REPLACE_WITH_TENANT_ID",
                 "CLIENT_ID": "REPLACE_WITH_CLIENT_ID",
-                "CLIENT_SECRET": "REPLACE_WITH_SECRET"
+                "CLIENT_SECRET": "REPLACE_WITH_SECRET",
+                "OAUTH_SERVER_URL": "REPLACE_WITH_OAUTH_SERVER_URL"
             }
         }
     ]
