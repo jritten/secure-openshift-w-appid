@@ -146,6 +146,12 @@ We'll explore turning the application into a cloud friendly solution by breaking
 
 #### G. Red Hat CodeReady Container
 
+1. Minimum hardware requirements:
+
+    * 4 CPUs or more
+    * 9 GB of memory available or more
+    * 35 GB of storage space available or more
+
 1. [Install on Laptop: Red Hat CodeReady Containers](https://cloud.redhat.com/openshift/install/crc/installer-provisioned)
 
     **NOTES:**
@@ -321,7 +327,8 @@ We'll explore turning the application into a cloud friendly solution by breaking
 
     1. Click **Login**, enter the following and click submit:
 
-       username: <your username>
-       password: <your password>
+        username: `<your username>`
+
+        password: `<your password>`
 
     1. Click `Details`. You should observe ID and content information
