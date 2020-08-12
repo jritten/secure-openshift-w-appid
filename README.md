@@ -301,6 +301,7 @@ We'll explore turning the application into a cloud friendly solution by breaking
 
         ```sh
         cd ../modern-ui
+        npm run install:all
         npm run build:content
         npm run nodeshift
         oc expose svc/modern-ui
