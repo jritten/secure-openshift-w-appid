@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from './auth.service';
 
 @Component({
   templateUrl: './home.component.html'
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
 
-  constructor() {
-  }
+  authenticated: boolean;
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+
+    this.authService.isAuthenticated().subscribe((res:boolean)=>{
+      this.authenticated = res;
+    });
+  }  
 }
